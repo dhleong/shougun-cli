@@ -2,6 +2,7 @@ import { createClient } from "msgpack-rpc-lite";
 import { IMedia } from "./model";
 
 export class RpcClient {
+    public static readonly VERSION = 1;
 
     constructor(
         private readonly host: string,
@@ -12,6 +13,12 @@ export class RpcClient {
         title: string,
     ): Promise<IMedia[]> {
         return this.perform("search", title);
+    }
+
+    public async start(
+        media: IMedia,
+    ): Promise<IMedia | undefined> {
+        return this.perform("start", media);
     }
 
     public async startByTitle(

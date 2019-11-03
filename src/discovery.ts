@@ -23,19 +23,39 @@ export async function discover(
     };
 
     const client = new Client();
+    const foundVersions = new Set<string>();
 
     const promise = new Promise<RpcClient>((resolve, reject) => {
         const timeout = setTimeout(() => {
             client.stop();
-            reject(new Error("Timeout searching for server"));
+
+            if (!foundVersions.size) {
+                reject(new Error("Timeout searching for server"));
+            } else {
+                const versions = Array.from(foundVersions);
+                const message = `No servers with matching versions found; ` +
+                    `found servers with version: ${versions} ` +
+                    `but we need ${RpcClient.VERSION}`;
+                reject(new Error(message));
+            }
         }, opts.timeout);
 
         client.on("response", (headers, statusCode, info) => {
+            debug("got", headers);
             const location = headers.LOCATION;
             if (!location) return;
 
             const { host, port } = url.parse(location);
             if (!(host && port)) return;
+
+            if (typeof headers.SERVER !== "string") return;
+            const serverInfo = headers.SERVER.split(":");
+            const serverVersion = serverInfo[serverInfo.length - 1];
+
+            if (parseInt(serverVersion, 10) !== RpcClient.VERSION) {
+                foundVersions.add(serverVersion);
+                return;
+            }
 
             clearTimeout(timeout);
             client.stop();
@@ -46,7 +66,7 @@ export async function discover(
 
     });
 
-    const result = client.search("urn:schemas:service:ShougunServer:1");
+    const result = client.search("urn:schemas:service:ShougunServer:*");
     if (result) {
         await result;
         debug("finished sending search");
