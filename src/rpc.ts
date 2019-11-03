@@ -1,4 +1,5 @@
 import { createClient } from "msgpack-rpc-lite";
+import { IMedia } from "./model";
 
 export class RpcClient {
 
@@ -7,9 +8,15 @@ export class RpcClient {
         private readonly port: number,
     ) { }
 
+    public async search(
+        title: string,
+    ): Promise<IMedia[]> {
+        return this.perform("search", title);
+    }
+
     public async startByTitle(
         title: string,
-    ): Promise<{title: string} | undefined> {
+    ): Promise<IMedia | undefined> {
         return this.perform("startByTitle", title);
     }
 
