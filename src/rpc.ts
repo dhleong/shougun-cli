@@ -9,10 +9,20 @@ export class RpcClient {
         private readonly port: number,
     ) { }
 
+    public async queryRecommended(opts?: {
+        maxResults?: number,
+    }): Promise<IMedia[]> {
+        return this.perform("queryRecommended", opts);
+    }
+
     public async search(
         title: string,
     ): Promise<IMedia[]> {
         return this.perform("search", title);
+    }
+
+    public async showRecommendations(): Promise<void> {
+        return this.perform("showRecommendations");
     }
 
     public async start(

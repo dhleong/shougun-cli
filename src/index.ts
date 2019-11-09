@@ -5,6 +5,6 @@ import { discover } from "./discovery";
 // tslint:disable no-console
 (async () => {
     const client = await discover();
-    const result = await client.search("shikaotoko");
-    console.log("result=", await client.start(result[0]));
+    const result = await client.queryRecommended();
+    console.log("result=", result);
 })().catch(e => { console.error("error", e, e.stack); });
