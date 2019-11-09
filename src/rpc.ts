@@ -7,6 +7,7 @@ export class RpcClient {
     constructor(
         private readonly host: string,
         private readonly port: number,
+        private readonly timeout: number = 7,
     ) { }
 
     public async queryRecommended(opts?: {
@@ -38,7 +39,7 @@ export class RpcClient {
     }
 
     private async perform(request: string, ...args: any[]) {
-        const client = createClient(this.port, this.host);
+        const client = createClient(this.port, this.host, this.timeout);
         try {
             const result = client.request(request, args);
             if (!result) throw new Error("No result");
