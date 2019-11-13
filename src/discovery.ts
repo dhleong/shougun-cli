@@ -1,13 +1,14 @@
 import _debug from "debug";
 const debug = _debug("shougun:cli:discover");
 
-import url from "url";
+import * as url from "url";
 
 import { Client } from "node-ssdp";
 import { RpcClient } from "./rpc";
 
 export interface IDiscoverOptions {
     timeout?: number;
+    rpcTimeout?: number;
 }
 
 const defaultOptions: IDiscoverOptions = {
@@ -61,7 +62,7 @@ export async function discover(
             client.stop();
 
             debug("Found server at", headers, info);
-            resolve(new RpcClient(info.address, parseInt(port, 10)));
+            resolve(new RpcClient(info.address, parseInt(port, 10), opts.rpcTimeout));
         });
 
     });
