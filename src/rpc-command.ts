@@ -1,4 +1,5 @@
 import { Command, flags as flg } from "@oclif/command";
+import cli from "cli-ux";
 
 import { discover } from "./discovery";
 import { RpcClient } from "./rpc";
@@ -37,9 +38,17 @@ export abstract class RpcCommand extends Command {
             );
         }
 
-        return discover({
-            rpcTimeout: timeout,
-        });
+        try {
+            cli.action.start("Connecting to server");
+            const rpc = await discover({
+                rpcTimeout: timeout,
+            });
+
+            return proxyWithUi(this, rpc);
+
+        } finally {
+            cli.action.stop();
+        }
     }
 }
 
@@ -49,4 +58,35 @@ function tryParseInt(v: string) {
     } catch (e) {
         // ignore; return undefined
     }
+}
+
+function proxyWithUi(
+    command: RpcCommand,
+    client: RpcClient,
+) {
+    const handler = {
+        get: (target: RpcClient, key: string) => {
+            switch (key) {
+            case "constructor":
+                return RpcClient.constructor;
+            default:
+                if (!(target as any)[key]) {
+                    return undefined;
+                }
+            }
+
+            const fn = (target as any)[key].bind(target);
+            return async (...args: any[]) => {
+                cli.action.start("Communicating");
+                try {
+                    return await fn(...args);
+                } finally {
+                    cli.action.stop();
+                    command.log("");
+                }
+            };
+        },
+    };
+
+    return new Proxy(client, handler);
 }
