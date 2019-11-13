@@ -31,6 +31,8 @@ USAGE
 # Commands
 <!-- commands -->
 * [`shougun help [COMMAND]`](#shougun-help-command)
+* [`shougun play [QUERY]`](#shougun-play-query)
+* [`shougun recommend`](#shougun-recommend)
 * [`shougun search [QUERY]`](#shougun-search-query)
 
 ## `shougun help [COMMAND]`
@@ -49,6 +51,45 @@ OPTIONS
 ```
 
 _See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v2.2.1/src/commands/help.ts)_
+
+## `shougun play [QUERY]`
+
+Play by title
+
+```
+USAGE
+  $ shougun play [QUERY]
+
+OPTIONS
+  -h, --help             show CLI help
+  -s, --server=server    ip:port to connect to
+  -t, --timeout=timeout  in seconds
+
+EXAMPLE
+  $ play the good place
+```
+
+_See code: [src/commands/play.ts](https://github.com/dhleong/shougun-cli/blob/v0.1.0/src/commands/play.ts)_
+
+## `shougun recommend`
+
+Fetch recommendations
+
+```
+USAGE
+  $ shougun recommend
+
+OPTIONS
+  -h, --help             show CLI help
+  -p, --print            print results to stdout instead of casting
+  -s, --server=server    ip:port to connect to
+  -t, --timeout=timeout  in seconds
+
+EXAMPLE
+  $ recommend
+```
+
+_See code: [src/commands/recommend.ts](https://github.com/dhleong/shougun-cli/blob/v0.1.0/src/commands/recommend.ts)_
 
 ## `shougun search [QUERY]`
 
