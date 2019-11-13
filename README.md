@@ -12,6 +12,7 @@ Take command of your media
 * [Usage](#usage)
 * [Commands](#commands)
 <!-- tocstop -->
+
 # Usage
 <!-- usage -->
 ```sh-session
@@ -26,10 +27,10 @@ USAGE
 ...
 ```
 <!-- usagestop -->
+
 # Commands
 <!-- commands -->
 * [`shougun help [COMMAND]`](#shougun-help-command)
-* [`shougun rpc`](#shougun-rpc)
 * [`shougun search [QUERY]`](#shougun-search-query)
 
 ## `shougun help [COMMAND]`
@@ -48,20 +49,6 @@ OPTIONS
 ```
 
 _See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v2.2.1/src/commands/help.ts)_
-
-## `shougun rpc`
-
-```
-USAGE
-  $ shougun rpc
-
-OPTIONS
-  -h, --help             show CLI help
-  -s, --server=server    ip:port to connect to
-  -t, --timeout=timeout  in seconds
-```
-
-_See code: [src/commands/rpc.ts](https://github.com/dhleong/shougun-cli/blob/v0.1.0/src/commands/rpc.ts)_
 
 ## `shougun search [QUERY]`
 

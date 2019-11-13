@@ -1,8 +1,12 @@
 import { Command, flags as flg } from "@oclif/command";
 
-import { discover } from "../discovery";
-import { RpcClient } from "../rpc";
+import { discover } from "./discovery";
+import { RpcClient } from "./rpc";
 
+/**
+ * Base command implementation for all RPC-based CLI commands; not in the
+ * ./commands package to avoid confusing oclif
+ */
 export abstract class RpcCommand extends Command {
     public static flags = {
         help: flg.help({char: "h"}),

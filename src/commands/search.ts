@@ -2,7 +2,7 @@ import { flags as flg } from "@oclif/command";
 
 import { printMediaResults } from "../output";
 
-import { RpcCommand } from "./rpc";
+import { RpcCommand } from "../rpc-command";
 
 export default class Search extends RpcCommand {
     public static description = "Search for available titles";
