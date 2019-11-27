@@ -3,8 +3,17 @@ const debug = _debug("shougun:cli:discover");
 
 import * as url from "url";
 
+import os from "os";
+import pathlib from "path";
+
+import fsextra from "fs-extra";
 import { Client } from "node-ssdp";
 import { RpcClient } from "./rpc";
+
+export const LOCAL_ANNOUNCE_PATH = pathlib.join(
+    os.homedir(),
+    ".config/shougun/announce.port",
+);
 
 export interface IDiscoverOptions {
     timeout?: number;
@@ -67,11 +76,27 @@ export async function discover(
 
     });
 
-    const result = client.search("urn:schemas:service:ShougunServer:*");
-    if (result) {
-        await result;
-        debug("finished sending search");
+    try {
+        const result = client.search("urn:schemas:service:ShougunServer:*");
+        if (result) {
+            await result;
+            debug("finished sending search");
+        }
+
+        return promise;
+    } catch (e) {
+        if (!e.message.includes("No sockets available")) {
+            throw e;
+        }
     }
 
-    return promise;
+    debug("No sockets available; searching in local mode");
+    promise.catch(e => { /* ignore */ });
+
+    const portBuffer = await fsextra.readFile(LOCAL_ANNOUNCE_PATH);
+    return new RpcClient(
+        "localhost",
+        parseInt(portBuffer.toString(), 10),
+        opts.rpcTimeout,
+    );
 }
