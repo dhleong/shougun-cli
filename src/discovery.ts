@@ -34,9 +34,10 @@ export async function discover(
 
     const client = new Client();
     const foundVersions = new Set<string>();
+    let timeout: number | undefined;
 
     const promise = new Promise<RpcClient>((resolve, reject) => {
-        const timeout = setTimeout(() => {
+        timeout = setTimeout(() => {
             client.stop();
 
             if (!foundVersions.size) {
@@ -92,6 +93,10 @@ export async function discover(
 
     debug("No sockets available; searching in local mode");
     promise.catch(e => { /* ignore */ });
+
+    if (timeout) {
+        clearTimeout(timeout);
+    }
 
     const portBuffer = await fsextra.readFile(LOCAL_ANNOUNCE_PATH);
     return new RpcClient(
