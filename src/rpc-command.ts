@@ -80,6 +80,9 @@ function proxyWithUi(
                 cli.action.start("Communicating");
                 try {
                     return await fn(...args);
+                } catch (e) {
+                    command.error(e, { exit: 2});
+                    throw e;
                 } finally {
                     cli.action.stop();
                     command.log("");
