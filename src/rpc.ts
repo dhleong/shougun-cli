@@ -1,5 +1,5 @@
 import { createClient } from "msgpack-rpc-lite";
-import { IMedia } from "./model";
+import { IMedia, ITakeoutRequest, ITakeoutResponse } from "./model";
 
 export class RpcClient {
     public static readonly VERSION = 1;
@@ -10,8 +10,16 @@ export class RpcClient {
         private readonly timeout: number = 7,
     ) { }
 
+    public async queryRecent(opts?: {
+        maxResults?: number,
+        onlyLocal?: boolean,
+    }): Promise<IMedia[]> {
+        return this.perform("queryRecent", opts);
+    }
+
     public async queryRecommended(opts?: {
         maxResults?: number,
+        onlyLocal?: boolean,
     }): Promise<IMedia[]> {
         return this.perform("queryRecommended", opts);
     }
@@ -36,6 +44,12 @@ export class RpcClient {
         title: string,
     ): Promise<IMedia | undefined> {
         return this.perform("startByTitle", title);
+    }
+
+    public async takeout(
+        requests: ITakeoutRequest[],
+    ): Promise<ITakeoutResponse> {
+        return this.perform("takeout", requests);
     }
 
     private async perform(request: string, ...args: any[]) {
