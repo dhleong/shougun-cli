@@ -150,7 +150,7 @@ export default class Takeout extends RpcCommand {
         };
 
         while (true) {
-            const item = queue.pop();
+            const item = queue.shift();
             if (!item) {
                 break;
             }
