@@ -1,8 +1,11 @@
 import { flags as flg } from "@oclif/command";
-import { MultiBar, Presets } from "cli-progress";
+import { Bar, FormatFn, MultiBar, Presets } from "cli-progress";
 import { prompt } from "inquirer";
 import os from "os";
 import pathlib from "path";
+
+// tslint:disable-next-line no-var-requires
+const defaultProgressFormatter = require("cli-progress/lib/formatter") as FormatFn;
 
 import { SimpleDownloader } from "../downloader/simple";
 import {
@@ -18,7 +21,7 @@ import { RpcCommand } from "../rpc-command";
 
 type TakeoutWithTitle = ITakeoutRequest & { title: string };
 
-const SIMULTANEOUS_DOWNLOADS = 5;
+const SIMULTANEOUS_DOWNLOADS = 3;
 
 export default class Takeout extends RpcCommand {
     public static description = "Copy files for local playback";
@@ -94,14 +97,30 @@ export default class Takeout extends RpcCommand {
     ) {
         const multiBar = new MultiBar({
             clearOnComplete: true,
-            format: "{bar} [{title}] {eta_formatted}",
+            format: (options, params, payload) => {
+                let format: string;
+                if (payload.title) {
+                    // file download line:
+                    format = "{bar} [{title}] {eta_formatted}";
+                } else {
+                    // total files line:
+                    format = "Downloading: {bar} [{value} / {total}]";
+                }
+
+                return defaultProgressFormatter({
+                    ...options,
+                    format,
+                }, params, payload);
+            },
             hideCursor: true,
         }, Presets.shades_classic);
 
+        const overallProgress = multiBar.create(response.media.length, 0);
         const downloader = new SimpleDownloader();
         const tasks: Array<Promise<void>> = [];
         for (let i = 0; i < SIMULTANEOUS_DOWNLOADS; ++i) {
             tasks.push(this.createDownloadTask(
+                overallProgress,
                 multiBar,
                 downloader,
                 rootPath,
@@ -116,6 +135,7 @@ export default class Takeout extends RpcCommand {
     }
 
     private async createDownloadTask(
+        overallProgress: Bar,
         multiBar: MultiBar,
         downloader: IDownloader,
         rootPath: string,
@@ -154,6 +174,7 @@ export default class Takeout extends RpcCommand {
                 url: item.url,
             });
             bar.stop();
+            overallProgress.increment(1);
         }
 
         multiBar.remove(bar);
