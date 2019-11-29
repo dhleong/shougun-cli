@@ -16,11 +16,15 @@ export class SimpleDownloader implements IDownloader {
             });
         });
         const length = parseInt(resp.headers["content-length"] as string, 10);
-        options.onSize(length);
+        const shouldDownload = await options.onSize(length);
+        if (shouldDownload === false) {
+            resp.destroy();
+            return false;
+        }
 
         const output = fs.createWriteStream(options.localPath);
 
-        return new Promise<void>(resolve => {
+        await new Promise<void>(resolve => {
             resp.on("data", buffer => {
                 output.write(buffer);
                 if (buffer instanceof Buffer) {
@@ -35,5 +39,6 @@ export class SimpleDownloader implements IDownloader {
                 resolve();
             });
         });
+        return true;
     }
 }

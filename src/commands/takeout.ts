@@ -160,7 +160,7 @@ export default class Takeout extends RpcCommand {
         queue: ITakeoutTask[],
     ) {
         const bar = multiBar.create(0, 0);
-        const onSize = (size: number) => {
+        const onSize = async (size: number) => {
             bar.setTotal(size);
         };
         const onBytes = (bytes: number) => {

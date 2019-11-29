@@ -43,10 +43,10 @@ export interface ITakeoutResponse {
 export interface IDownloaderOptions {
     url: string;
     localPath: string;
-    onSize: (totalBytes: number) => void;
+    onSize: (totalBytes: number) => Promise<boolean | void>;
     onBytes: (bytesDownloaded: number) => void;
 }
 
 export interface IDownloader {
-    download(options: IDownloaderOptions): Promise<void>;
+    download(options: IDownloaderOptions): Promise<boolean>;
 }
