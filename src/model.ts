@@ -23,17 +23,21 @@ export interface ITakeoutRequest {
 }
 
 export interface ITakeoutItem {
-    media: {
-        id: string;
-        seriesId: string;
-        title: string;
-    };
+    id: string;
+    title: string;
+    type: MediaType;
     resumeTimeSeconds?: number;
     url: string;
 }
 
+export interface ITakeoutSeries {
+    episodes: ITakeoutItem[];
+    title: string;
+    id: string;
+}
+
 export interface ITakeoutResponse {
-    media: ITakeoutItem[];
+    series: ITakeoutSeries[];
 }
 
 export interface IDownloader {

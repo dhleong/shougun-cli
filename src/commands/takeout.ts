@@ -23,6 +23,11 @@ type TakeoutWithTitle = ITakeoutRequest & { title: string };
 
 const SIMULTANEOUS_DOWNLOADS = 3;
 
+interface ITakeoutTask {
+    containerTitle: string;
+    item: ITakeoutItem;
+}
+
 export default class Takeout extends RpcCommand {
     public static description = "Copy files for local playback";
     public static examples = [
@@ -46,6 +51,8 @@ export default class Takeout extends RpcCommand {
         const response = await rpc.takeout(requests);
 
         await this.downloadFiles(response, localPath);
+
+        // TODO write watch info to storage?
     }
 
     private async selectSeries(rpc: RpcClient) {
@@ -115,7 +122,17 @@ export default class Takeout extends RpcCommand {
             hideCursor: true,
         }, Presets.shades_classic);
 
-        const overallProgress = multiBar.create(response.media.length, 0);
+        const media: ITakeoutTask[] = [];
+        for (const s of response.series) {
+            for (const e of s.episodes) {
+                media.push({
+                    containerTitle: s.title,
+                    item: e,
+                });
+            }
+        }
+
+        const overallProgress = multiBar.create(media.length, 0);
         const downloader = new SimpleDownloader();
         const tasks: Array<Promise<void>> = [];
         for (let i = 0; i < SIMULTANEOUS_DOWNLOADS; ++i) {
@@ -124,7 +141,7 @@ export default class Takeout extends RpcCommand {
                 multiBar,
                 downloader,
                 rootPath,
-                response.media,
+                media,
             ));
         }
 
@@ -139,7 +156,7 @@ export default class Takeout extends RpcCommand {
         multiBar: MultiBar,
         downloader: IDownloader,
         rootPath: string,
-        queue: ITakeoutItem[],
+        queue: ITakeoutTask[],
     ) {
         const bar = multiBar.create(0, 0);
         const onSize = (size: number) => {
@@ -150,21 +167,22 @@ export default class Takeout extends RpcCommand {
         };
 
         while (true) {
-            const item = queue.shift();
-            if (!item) {
+            const task = queue.shift();
+            if (!task) {
                 break;
             }
 
+            const { item } = task;
             const extension = pathlib.extname(item.url);
-            const fileName = item.media.title + extension;
+            const fileName = item.title + extension;
             const localPath = pathlib.join(
                 rootPath,
-                item.media.seriesId,
+                task.containerTitle,
                 fileName,
             );
 
             bar.update(0, {
-                title: item.media.title,
+                title: item.title,
             });
 
             await downloader.download({
