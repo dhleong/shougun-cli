@@ -40,11 +40,13 @@ export interface ITakeoutResponse {
     series: ITakeoutSeries[];
 }
 
+export interface IDownloaderOptions {
+    url: string;
+    localPath: string;
+    onSize: (totalBytes: number) => void;
+    onBytes: (bytesDownloaded: number) => void;
+}
+
 export interface IDownloader {
-    download(options: {
-        url: string,
-        localPath: string,
-        onSize: (totalBytes: number) => void,
-        onBytes: (bytesDownloaded: number) => void,
-    }): Promise<void>;
+    download(options: IDownloaderOptions): Promise<void>;
 }

@@ -50,7 +50,8 @@ export default class Takeout extends RpcCommand {
 
         const response = await rpc.takeout(requests);
 
-        await this.downloadFiles(response, localPath);
+        const downloader = await this.createDownloader(flags);
+        await this.downloadFiles(downloader, response, localPath);
 
         // TODO write watch info to storage?
     }
@@ -99,6 +100,7 @@ export default class Takeout extends RpcCommand {
     }
 
     private async downloadFiles(
+        downloader: IDownloader,
         response: ITakeoutResponse,
         rootPath: string,
     ) {
@@ -133,7 +135,6 @@ export default class Takeout extends RpcCommand {
         }
 
         const overallProgress = multiBar.create(media.length, 0);
-        const downloader = new SimpleDownloader();
         const tasks: Array<Promise<void>> = [];
         for (let i = 0; i < SIMULTANEOUS_DOWNLOADS; ++i) {
             tasks.push(this.createDownloadTask(

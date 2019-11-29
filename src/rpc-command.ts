@@ -2,6 +2,9 @@ import { Command, flags as flg } from "@oclif/command";
 import cli from "cli-ux";
 
 import { discover } from "./discovery";
+import { PathHandlingDownloader } from "./downloader/path-handling";
+import { SimpleDownloader } from "./downloader/simple";
+import { IDownloader } from "./model";
 import { RpcClient } from "./rpc";
 
 /**
@@ -49,6 +52,12 @@ export abstract class RpcCommand extends Command {
         } finally {
             cli.action.stop();
         }
+    }
+
+    protected async createDownloader(flags: any): Promise<IDownloader> {
+        // in the future we might support fancier downloaders that the
+        // user can request
+        return new PathHandlingDownloader(new SimpleDownloader());
     }
 }
 

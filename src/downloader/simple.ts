@@ -1,16 +1,15 @@
 import fs from "fs-extra";
 import * as http from "http";
-import pathlib from "path";
 
-import { IDownloader } from "../model";
+import { IDownloader, IDownloaderOptions } from "../model";
 
+/**
+ * Simple downloader implementation using Node's builtin HTTP libraries.
+ * Supports progress notification, but expects to be wrapped in a
+ * PathHandlingDownloader
+ */
 export class SimpleDownloader implements IDownloader {
-    public async download(options: {
-        url: string,
-        localPath: string,
-        onSize: (totalBytes: number) => void,
-        onBytes: (bytesDownloaded: number) => void,
-    }) {
+    public async download(options: IDownloaderOptions) {
         const resp = await new Promise<http.IncomingMessage>(resolve => {
             http.get(options.url, res => {
                 resolve(res);
@@ -19,7 +18,6 @@ export class SimpleDownloader implements IDownloader {
         const length = parseInt(resp.headers["content-length"] as string, 10);
         options.onSize(length);
 
-        await fs.mkdirs(pathlib.dirname(options.localPath));
         const output = fs.createWriteStream(options.localPath);
 
         return new Promise<void>(resolve => {
