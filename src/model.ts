@@ -38,6 +38,16 @@ export interface ITakeoutSeries {
 
 export interface ITakeoutResponse {
     series: ITakeoutSeries[];
+    token: string;
+}
+
+export interface ITakeoutInstructions {
+    token: string;
+
+    nextMedia: Array<{
+        id: string;
+        resumeTimeSeconds?: number;
+    }>;
 }
 
 export interface IDownloaderOptions {

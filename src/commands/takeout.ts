@@ -8,9 +8,9 @@ import pathlib from "path";
 // tslint:disable-next-line no-var-requires
 const defaultProgressFormatter = require("cli-progress/lib/formatter") as FormatFn;
 
-import { SimpleDownloader } from "../downloader/simple";
 import {
     IDownloader,
+    ITakeoutInstructions,
     ITakeoutItem,
     ITakeoutRequest,
     ITakeoutResponse,
@@ -63,7 +63,7 @@ export default class Takeout extends RpcCommand {
         const downloader = await this.createDownloader(flags);
         await this.downloadFiles(downloader, response, localPath);
 
-        // TODO write watch info to storage?
+        await this.writeTakeoutInstructions(response);
     }
 
     private async selectSeries(rpc: RpcClient) {
@@ -210,5 +210,32 @@ export default class Takeout extends RpcCommand {
         }
 
         multiBar.remove(bar);
+    }
+
+    private async writeTakeoutInstructions(response: ITakeoutResponse) {
+        const instructions: ITakeoutInstructions = {
+            nextMedia: [],
+            token: response.token,
+        };
+
+        for (const s of response.series) {
+            if (!s.episodes.length) {
+                continue;
+            }
+
+            const e = s.episodes[0];
+            instructions.nextMedia.push({
+                id: e.id,
+                resumeTimeSeconds: e.resumeTimeSeconds,
+            });
+        }
+
+        const takeoutFile = pathlib.join(
+            os.homedir(),
+            ".config", "shougun", "takeout",
+            `takeout.${response.token}.json`,
+        );
+        await fs.mkdirs(pathlib.dirname(takeoutFile));
+        await fs.writeJson(takeoutFile, instructions);
     }
 }
