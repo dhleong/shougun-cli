@@ -26,6 +26,7 @@ const SIMULTANEOUS_DOWNLOADS = 3;
 
 interface ITakeoutTask {
     containerTitle: string;
+    subDirectories: string[];
     item: ITakeoutItem;
 }
 
@@ -136,9 +137,11 @@ export default class Takeout extends RpcCommand {
         const media: ITakeoutTask[] = [];
         for (const s of response.series) {
             for (const e of s.episodes) {
+                const parts = e.id.split(":").slice(1, -1);
                 media.push({
                     containerTitle: s.title,
                     item: e,
+                    subDirectories: parts,
                 });
             }
         }
@@ -188,6 +191,7 @@ export default class Takeout extends RpcCommand {
             const localPath = pathlib.join(
                 rootPath,
                 task.containerTitle,
+                ...task.subDirectories,
                 fileName,
             );
 
