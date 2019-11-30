@@ -1,14 +1,36 @@
 import { createClient } from "msgpack-rpc-lite";
 import { IMedia, ITakeoutRequest, ITakeoutResponse } from "./model";
 
+const DEFAULT_TIMEOUT = 7;
+
 export class RpcClient {
     public static readonly VERSION = 1;
 
+    public static async findByAddress(
+        host: string,
+        port: number,
+        timeout: number = DEFAULT_TIMEOUT,
+    ) {
+        const client = new RpcClient(
+            "...searching...",
+            host,
+            port,
+            timeout,
+        );
+        const id = await client.getId();
+        return new RpcClient(id, host, port, timeout);
+    }
+
     constructor(
+        public readonly serverId: string,
         private readonly host: string,
         private readonly port: number,
-        private readonly timeout: number = 7,
+        private readonly timeout: number = DEFAULT_TIMEOUT,
     ) { }
+
+    public async getId(): Promise<string> {
+        return this.perform("getId");
+    }
 
     public async queryRecent(opts?: {
         maxResults?: number,

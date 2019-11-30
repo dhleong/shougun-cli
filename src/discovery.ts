@@ -18,6 +18,11 @@ export const LOCAL_ANNOUNCE_PATH = pathlib.join(
 export interface IDiscoverOptions {
     timeout?: number;
     rpcTimeout?: number;
+
+    /**
+     * If provided, the sid of the server to find
+     */
+    sid?: string;
 }
 
 const defaultOptions: IDiscoverOptions = {
@@ -62,6 +67,14 @@ export async function discover(
             if (typeof headers.SERVER !== "string") return;
             const serverInfo = headers.SERVER.split(":");
             const serverVersion = serverInfo[serverInfo.length - 1];
+            if (!headers.SID || typeof headers.SID !== "string") {
+                return;
+            }
+
+            const serverUuid: string = headers.SID;
+            if (opts.sid && serverUuid !== opts.sid) {
+                return;
+            }
 
             if (parseInt(serverVersion, 10) !== RpcClient.VERSION) {
                 foundVersions.add(serverVersion);
@@ -72,7 +85,12 @@ export async function discover(
             client.stop();
 
             debug("Found server at", headers, info);
-            resolve(new RpcClient(info.address, parseInt(port, 10), opts.rpcTimeout));
+            resolve(new RpcClient(
+                serverUuid,
+                info.address,
+                parseInt(port, 10),
+                opts.rpcTimeout,
+            ));
         });
 
     });
@@ -99,7 +117,7 @@ export async function discover(
     }
 
     const portBuffer = await fsextra.readFile(LOCAL_ANNOUNCE_PATH);
-    return new RpcClient(
+    return RpcClient.findByAddress(
         "localhost",
         parseInt(portBuffer.toString(), 10),
         opts.rpcTimeout,
