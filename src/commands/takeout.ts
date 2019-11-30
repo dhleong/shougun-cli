@@ -1,5 +1,6 @@
 import { flags as flg } from "@oclif/command";
 import { Bar, FormatFn, MultiBar, Presets } from "cli-progress";
+import fs from "fs-extra";
 import { prompt } from "inquirer";
 import os from "os";
 import pathlib from "path";
@@ -36,12 +37,20 @@ export default class Takeout extends RpcCommand {
     public static flags = {
         ...RpcCommand.flags,
     };
+    public static args = [
+        {
+            description: "Where to save the downloaded videos",
+            name: "path",
+        },
+    ];
 
     public static strict = false;
 
     public async run() {
-        const {argv, flags} = this.parse(Takeout);
-        const localPath = "";
+        const {args, flags} = this.parse(Takeout);
+        const localPath = args.path || ".";
+
+        await fs.access(localPath, fs.constants.W_OK);
 
         const rpc = await this.rpc(flags);
 
