@@ -53,7 +53,9 @@ export default class Takeout extends RpcCommand {
 
         await fs.access(localPath, fs.constants.W_OK);
 
-        const rpc = await this.rpc(flags);
+        const rpc = await this.rpc(flags, {
+            libraryOnly: true,
+        });
 
         const requests = await this.selectSeries(rpc);
         await this.chooseEpisodesPerRequest(requests);

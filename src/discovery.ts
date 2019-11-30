@@ -23,6 +23,18 @@ export interface IDiscoverOptions {
      * If provided, the sid of the server to find
      */
     sid?: string;
+
+    /**
+     * If true, will only find servers that are "libraries"
+     * (IE: accept takeout requests, but don't load takeout)
+     */
+    libraryOnly?: boolean;
+
+    /**
+     * If true, will only find servers that are "borrowers"
+     * (IE: will load takeouts, but not accept requests)
+     */
+    borrowerOnly?: boolean;
 }
 
 const defaultOptions: IDiscoverOptions = {
@@ -96,7 +108,7 @@ export async function discover(
     });
 
     try {
-        const result = client.search("urn:schemas:service:ShougunServer:*");
+        const result = client.search(modeToUrn(opts));
         if (result) {
             await result;
             debug("finished sending search");
@@ -122,4 +134,16 @@ export async function discover(
         parseInt(portBuffer.toString(), 10),
         opts.rpcTimeout,
     );
+}
+
+function modeToUrn(options: IDiscoverOptions) {
+    if (options.borrowerOnly) {
+        return "urn:schemas:service:ShougunBorrower:*";
+    }
+    if (options.libraryOnly) {
+        return "urn:schemas:service:ShougunLibrary:*";
+    }
+
+    // default: any kind of server
+    return "urn:schemas:service:ShougunServer:*";
 }

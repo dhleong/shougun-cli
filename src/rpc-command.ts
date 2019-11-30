@@ -1,7 +1,7 @@
 import { Command, flags as flg } from "@oclif/command";
 import cli from "cli-ux";
 
-import { discover } from "./discovery";
+import { discover, IDiscoverOptions } from "./discovery";
 import { PathHandlingDownloader } from "./downloader/path-handling";
 import { SimpleDownloader } from "./downloader/simple";
 import { IDownloader } from "./model";
@@ -25,7 +25,7 @@ export abstract class RpcCommand extends Command {
         }),
     };
 
-    protected async rpc(flags: any) {
+    protected async rpc(flags: any, options: Partial<IDiscoverOptions> = {}) {
         const timeout = flags.timeout;
         if (flags.server) {
             // provided:
@@ -40,6 +40,7 @@ export abstract class RpcCommand extends Command {
         try {
             cli.action.start("Connecting to server");
             const rpc = await discover({
+                ...options,
                 rpcTimeout: timeout,
             });
 
