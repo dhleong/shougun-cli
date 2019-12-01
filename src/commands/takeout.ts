@@ -65,7 +65,7 @@ export default class Takeout extends RpcCommand {
         const downloader = await this.createDownloader(flags);
         await this.downloadFiles(downloader, response, localPath);
 
-        await this.writeTakeoutInstructions(response);
+        await this.writeTakeoutInstructions(response, rpc.serverId);
     }
 
     private async selectSeries(rpc: RpcClient) {
@@ -214,9 +214,13 @@ export default class Takeout extends RpcCommand {
         multiBar.remove(bar);
     }
 
-    private async writeTakeoutInstructions(response: ITakeoutResponse) {
+    private async writeTakeoutInstructions(
+        response: ITakeoutResponse,
+        serverId: string,
+    ) {
         const instructions: ITakeoutInstructions = {
             nextMedia: [],
+            serverId,
             token: response.token,
         };
 

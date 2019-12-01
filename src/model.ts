@@ -42,6 +42,7 @@ export interface ITakeoutResponse {
 }
 
 export interface ITakeoutInstructions {
+    serverId: string;
     token: string;
 
     nextMedia: Array<{
