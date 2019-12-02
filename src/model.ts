@@ -61,3 +61,20 @@ export interface IDownloaderOptions {
 export interface IDownloader {
     download(options: IDownloaderOptions): Promise<boolean>;
 }
+
+export interface IViewedInformation {
+    id: string;
+
+    seriesId?: string;
+    title: string;
+
+    /** Unix time in millis */
+    lastViewedTimestamp: number;
+    resumeTimeSeconds: number;
+    videoDurationSeconds: number;
+}
+
+export interface IBorrowedData {
+    tokens: Array<{ serverId: string, token: string }>;
+    viewedInformation: IViewedInformation[];
+}

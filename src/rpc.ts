@@ -1,5 +1,11 @@
 import { createClient } from "msgpack-rpc-lite";
-import { IMedia, ITakeoutRequest, ITakeoutResponse } from "./model";
+import {
+    IBorrowedData,
+    IMedia,
+    ITakeoutRequest,
+    ITakeoutResponse,
+    IViewedInformation,
+} from "./model";
 
 const DEFAULT_TIMEOUT = 7;
 
@@ -32,6 +38,12 @@ export class RpcClient {
         return this.perform("getId");
     }
 
+    public async markBorrowReturned(
+        tokens: string[],
+    ) {
+        return this.perform("markBorrowReturned", tokens);
+    }
+
     public async queryRecent(opts?: {
         maxResults?: number,
         onlyLocal?: boolean,
@@ -44,6 +56,17 @@ export class RpcClient {
         onlyLocal?: boolean,
     }): Promise<IMedia[]> {
         return this.perform("queryRecommended", opts);
+    }
+
+    public async retrieveBorrowed(): Promise<IBorrowedData> {
+        return this.perform("retrieveBorrowed");
+    }
+
+    public async returnBorrowed(
+        tokens: string[],
+        viewedInfo: IViewedInformation[],
+    ) {
+        return this.perform("returnBorrowed");
     }
 
     public async search(
