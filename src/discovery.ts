@@ -26,13 +26,13 @@ export interface IDiscoverOptions {
 
     /**
      * If true, will only find servers that are "libraries"
-     * (IE: accept takeout requests, but don't load takeout)
+     * (IE: accept borrow requests, but don't load loans)
      */
     libraryOnly?: boolean;
 
     /**
      * If true, will only find servers that are "borrowers"
-     * (IE: will load takeouts, but not accept requests)
+     * (IE: will load loans, but not accept borrow requests)
      */
     borrowerOnly?: boolean;
 }

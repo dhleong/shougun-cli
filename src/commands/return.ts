@@ -1,30 +1,30 @@
 import _debug from "debug";
-const debug = _debug("shougun-cli:takeout-return");
+const debug = _debug("shougun-cli:return");
 
 import {
     IBorrowedData,
+    IBorrowRequest,
+    IBorrowResponse,
     IDownloader,
-    ITakeoutInstructions,
-    ITakeoutItem,
-    ITakeoutRequest,
-    ITakeoutResponse,
+    ILoanInstructions,
+    ILoanItem,
     MediaType,
 } from "../model";
 import { printMediaResults } from "../output";
 import { RpcClient } from "../rpc";
 import { RpcCommand } from "../rpc-command";
 
-export default class TakeoutReturn extends RpcCommand {
-    public static description = "Send watched data back after a takeout";
+export default class Return extends RpcCommand {
+    public static description = "Return watched data after borrowing";
     public static examples = [
-        "$ takeout-return",
+        "$ return",
     ];
     public static flags = {
         ...RpcCommand.flags,
     };
 
     public async run() {
-        const {flags} = this.parse(TakeoutReturn);
+        const {flags} = this.parse(Return);
 
         debug("retrieve borrowed data");
         const borrowerRpc = await this.rpc(flags, {

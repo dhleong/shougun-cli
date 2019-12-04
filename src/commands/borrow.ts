@@ -9,31 +9,31 @@ import pathlib from "path";
 const defaultProgressFormatter = require("cli-progress/lib/formatter") as FormatFn;
 
 import {
+    IBorrowRequest,
+    IBorrowResponse,
     IDownloader,
-    ITakeoutInstructions,
-    ITakeoutItem,
-    ITakeoutRequest,
-    ITakeoutResponse,
+    ILoanInstructions,
+    ILoanItem,
     MediaType,
 } from "../model";
 import { printMediaResults } from "../output";
 import { RpcClient } from "../rpc";
 import { RpcCommand } from "../rpc-command";
 
-type TakeoutWithTitle = ITakeoutRequest & { title: string };
+type BorrowWithTitle = IBorrowRequest & { title: string };
 
 const SIMULTANEOUS_DOWNLOADS = 3;
 
-interface ITakeoutTask {
+interface IBorrowTask {
     containerTitle: string;
     subDirectories: string[];
-    item: ITakeoutItem;
+    item: ILoanItem;
 }
 
-export default class Takeout extends RpcCommand {
+export default class Borrow extends RpcCommand {
     public static description = "Copy files for local playback";
     public static examples = [
-        "$ takeout",
+        "$ borrow",
     ];
     public static flags = {
         ...RpcCommand.flags,
@@ -48,7 +48,7 @@ export default class Takeout extends RpcCommand {
     public static strict = false;
 
     public async run() {
-        const {args, flags} = this.parse(Takeout);
+        const {args, flags} = this.parse(Borrow);
         const localPath = args.path || ".";
 
         await fs.access(localPath, fs.constants.W_OK);
@@ -60,12 +60,12 @@ export default class Takeout extends RpcCommand {
         const requests = await this.selectSeries(rpc);
         await this.chooseEpisodesPerRequest(requests);
 
-        const response = await rpc.takeout(requests);
+        const response = await rpc.borrow(requests);
 
         const downloader = await this.createDownloader(flags);
         await this.downloadFiles(downloader, response, localPath);
 
-        await this.writeTakeoutInstructions(response, rpc.serverId);
+        await this.writeLoanInstructions(response, rpc.serverId);
     }
 
     private async selectSeries(rpc: RpcClient) {
@@ -81,7 +81,7 @@ export default class Takeout extends RpcCommand {
         }
 
         const chosen = await prompt({
-            message: "Choose a few series for takeout: ",
+            message: "Choose a few series to borrow: ",
             name: "requests",
             type: "checkbox",
 
@@ -91,10 +91,10 @@ export default class Takeout extends RpcCommand {
             })),
         });
 
-        return chosen.requests as TakeoutWithTitle[];
+        return chosen.requests as BorrowWithTitle[];
     }
 
-    private async chooseEpisodesPerRequest(requests: TakeoutWithTitle[]) {
+    private async chooseEpisodesPerRequest(requests: BorrowWithTitle[]) {
         const episodesPerSeries = await prompt(
             requests.map(r => ({
                 default: r.episodes,
@@ -113,7 +113,7 @@ export default class Takeout extends RpcCommand {
 
     private async downloadFiles(
         downloader: IDownloader,
-        response: ITakeoutResponse,
+        response: IBorrowResponse,
         rootPath: string,
     ) {
         const multiBar = new MultiBar({
@@ -136,7 +136,7 @@ export default class Takeout extends RpcCommand {
             hideCursor: true,
         }, Presets.shades_classic);
 
-        const media: ITakeoutTask[] = [];
+        const media: IBorrowTask[] = [];
         for (const s of response.series) {
             for (const e of s.episodes) {
                 const parts = e.id.split(":").slice(1, -1);
@@ -171,7 +171,7 @@ export default class Takeout extends RpcCommand {
         multiBar: MultiBar,
         downloader: IDownloader,
         rootPath: string,
-        queue: ITakeoutTask[],
+        queue: IBorrowTask[],
     ) {
         const bar = multiBar.create(0, 0);
         const onSize = async (size: number) => {
@@ -214,11 +214,11 @@ export default class Takeout extends RpcCommand {
         multiBar.remove(bar);
     }
 
-    private async writeTakeoutInstructions(
-        response: ITakeoutResponse,
+    private async writeLoanInstructions(
+        response: IBorrowResponse,
         serverId: string,
     ) {
-        const instructions: ITakeoutInstructions = {
+        const instructions: ILoanInstructions = {
             nextMedia: [],
             serverId,
             token: response.token,
@@ -236,12 +236,12 @@ export default class Takeout extends RpcCommand {
             });
         }
 
-        const takeoutFile = pathlib.join(
+        const borrowFile = pathlib.join(
             os.homedir(),
-            ".config", "shougun", "takeout",
-            `takeout.${response.token}.json`,
+            ".config", "shougun", "borrow",
+            `loan.${response.token}.json`,
         );
-        await fs.mkdirs(pathlib.dirname(takeoutFile));
-        await fs.writeJson(takeoutFile, instructions);
+        await fs.mkdirs(pathlib.dirname(borrowFile));
+        await fs.writeJson(borrowFile, instructions);
     }
 }

@@ -1,9 +1,9 @@
 import { createClient } from "msgpack-rpc-lite";
 import {
     IBorrowedData,
+    IBorrowRequest,
+    IBorrowResponse,
     IMedia,
-    ITakeoutRequest,
-    ITakeoutResponse,
     IViewedInformation,
 } from "./model";
 
@@ -91,10 +91,10 @@ export class RpcClient {
         return this.perform("startByTitle", title);
     }
 
-    public async takeout(
-        requests: ITakeoutRequest[],
-    ): Promise<ITakeoutResponse> {
-        return this.perform("takeout", requests);
+    public async borrow(
+        requests: IBorrowRequest[],
+    ): Promise<IBorrowResponse> {
+        return this.perform("borrow", requests);
     }
 
     private async perform(request: string, ...args: any[]) {

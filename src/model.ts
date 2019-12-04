@@ -17,12 +17,12 @@ export interface IMedia {
     type: MediaType;
 }
 
-export interface ITakeoutRequest {
+export interface IBorrowRequest {
     episodes: number;
     seriesId: string;
 }
 
-export interface ITakeoutItem {
+export interface ILoanItem {
     id: string;
     title: string;
     type: MediaType;
@@ -30,18 +30,18 @@ export interface ITakeoutItem {
     url: string;
 }
 
-export interface ITakeoutSeries {
-    episodes: ITakeoutItem[];
+export interface ILoanedSeries {
+    episodes: ILoanItem[];
     title: string;
     id: string;
 }
 
-export interface ITakeoutResponse {
-    series: ITakeoutSeries[];
+export interface IBorrowResponse {
+    series: ILoanedSeries[];
     token: string;
 }
 
-export interface ITakeoutInstructions {
+export interface ILoanInstructions {
     serverId: string;
     token: string;
 
