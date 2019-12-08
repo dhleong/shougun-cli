@@ -118,7 +118,7 @@ releaseNotes = notes.contents()
 # Deploy
 #
 
-verify(Execute('npm publish')).succeeds(silent=False)
+verify(Execute('npm publish --access public')).succeeds(silent=False)
 
 #
 # Upload to github

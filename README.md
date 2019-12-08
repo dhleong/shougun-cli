@@ -16,11 +16,11 @@ Take command of your media
 # Usage
 <!-- usage -->
 ```sh-session
-$ npm install -g shougun-cli
+$ npm install -g @shougun/cli
 $ shougun COMMAND
 running command...
 $ shougun (-v|--version|version)
-shougun-cli/0.1.0 darwin-x64 node-v11.15.0
+@shougun/cli/0.1.0 darwin-x64 node-v11.15.0
 $ shougun --help [COMMAND]
 USAGE
   $ shougun COMMAND
