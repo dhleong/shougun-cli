@@ -38,6 +38,10 @@ export class RpcClient {
         return this.perform("getId");
     }
 
+    public async loadLoans(): Promise<void> {
+        return this.perform("loadLoans");
+    }
+
     public async markBorrowReturned(
         tokens: string[],
     ) {

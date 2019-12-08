@@ -66,6 +66,19 @@ export default class Borrow extends RpcCommand {
         await this.downloadFiles(downloader, response, localPath);
 
         await this.writeLoanInstructions(response, rpc.serverId);
+
+        try {
+            // the borrower is probably local, so we can
+            // be pretty brief in our search for it
+            const borrowerRpc = await this.rpc(flags, {
+                borrowerOnly: true,
+                timeout: 1000,
+            });
+            borrowerRpc.loadLoans();
+        } catch (e) {
+            // ignore; borrower server not running
+        }
+
     }
 
     private async selectSeries(rpc: RpcClient) {
