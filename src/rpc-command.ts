@@ -81,7 +81,12 @@ function proxyWithUi(
                 }
             }
 
-            const fn = (target as any)[key].bind(target);
+            const property = (target as any)[key];
+            if (typeof property !== "function") {
+                return property;
+            }
+
+            const fn = property.bind(target);
             return async (...args: any[]) => {
                 cli.action.start("Communicating");
                 try {
