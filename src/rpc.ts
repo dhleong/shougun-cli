@@ -70,7 +70,7 @@ export class RpcClient {
         tokens: string[],
         viewedInfo: IViewedInformation[],
     ) {
-        return this.perform("returnBorrowed");
+        return this.perform("returnBorrowed", tokens, viewedInfo);
     }
 
     public async search(
