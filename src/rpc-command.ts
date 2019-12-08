@@ -1,7 +1,10 @@
 import { Command, flags as flg } from "@oclif/command";
 import cli from "cli-ux";
 
-import { discover } from "./discovery";
+import { discover, IDiscoverOptions } from "./discovery";
+import { PathHandlingDownloader } from "./downloader/path-handling";
+import { SimpleDownloader } from "./downloader/simple";
+import { IDownloader } from "./model";
 import { RpcClient } from "./rpc";
 
 /**
@@ -22,7 +25,7 @@ export abstract class RpcCommand extends Command {
         }),
     };
 
-    protected async rpc(flags: any) {
+    protected async rpc(flags: any, options: Partial<IDiscoverOptions> = {}) {
         const timeout = flags.timeout;
         if (flags.server) {
             // provided:
@@ -31,16 +34,13 @@ export abstract class RpcCommand extends Command {
                 throw new Error(`Invalid server format: ${flags.server}`);
             }
 
-            return new RpcClient(
-                host,
-                port,
-                timeout,
-            );
+            return RpcClient.findByAddress(host, port, timeout);
         }
 
         try {
             cli.action.start("Connecting to server");
             const rpc = await discover({
+                ...options,
                 rpcTimeout: timeout,
             });
 
@@ -49,6 +49,12 @@ export abstract class RpcCommand extends Command {
         } finally {
             cli.action.stop();
         }
+    }
+
+    protected async createDownloader(flags: any): Promise<IDownloader> {
+        // in the future we might support fancier downloaders that the
+        // user can request
+        return new PathHandlingDownloader(new SimpleDownloader());
     }
 }
 
@@ -75,11 +81,19 @@ function proxyWithUi(
                 }
             }
 
-            const fn = (target as any)[key].bind(target);
+            const property = (target as any)[key];
+            if (typeof property !== "function") {
+                return property;
+            }
+
+            const fn = property.bind(target);
             return async (...args: any[]) => {
                 cli.action.start("Communicating");
                 try {
                     return await fn(...args);
+                } catch (e) {
+                    command.error(e, { exit: 2});
+                    throw e;
                 } finally {
                     cli.action.stop();
                     command.log("");
