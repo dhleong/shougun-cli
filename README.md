@@ -20,7 +20,7 @@ $ npm install -g shougun-cli
 $ shougun COMMAND
 running command...
 $ shougun (-v|--version|version)
-shougun-cli/0.1.0 darwin-x64 node-v10.17.0
+shougun-cli/0.1.0 darwin-x64 node-v11.15.0
 $ shougun --help [COMMAND]
 USAGE
   $ shougun COMMAND
@@ -30,10 +30,34 @@ USAGE
 
 # Commands
 <!-- commands -->
+* [`shougun borrow [PATH]`](#shougun-borrow-path)
 * [`shougun help [COMMAND]`](#shougun-help-command)
 * [`shougun play [QUERY]`](#shougun-play-query)
 * [`shougun recommend`](#shougun-recommend)
+* [`shougun return`](#shougun-return)
 * [`shougun search [QUERY]`](#shougun-search-query)
+
+## `shougun borrow [PATH]`
+
+Copy files for local playback
+
+```
+USAGE
+  $ shougun borrow [PATH]
+
+ARGUMENTS
+  PATH  Where to save the downloaded videos
+
+OPTIONS
+  -h, --help             show CLI help
+  -s, --server=server    ip:port to connect to
+  -t, --timeout=timeout  in seconds
+
+EXAMPLE
+  $ borrow
+```
+
+_See code: [src/commands/borrow.ts](https://github.com/dhleong/shougun-cli/blob/v0.1.0/src/commands/borrow.ts)_
 
 ## `shougun help [COMMAND]`
 
@@ -90,6 +114,25 @@ EXAMPLE
 ```
 
 _See code: [src/commands/recommend.ts](https://github.com/dhleong/shougun-cli/blob/v0.1.0/src/commands/recommend.ts)_
+
+## `shougun return`
+
+Return watched data after borrowing
+
+```
+USAGE
+  $ shougun return
+
+OPTIONS
+  -h, --help             show CLI help
+  -s, --server=server    ip:port to connect to
+  -t, --timeout=timeout  in seconds
+
+EXAMPLE
+  $ return
+```
+
+_See code: [src/commands/return.ts](https://github.com/dhleong/shougun-cli/blob/v0.1.0/src/commands/return.ts)_
 
 ## `shougun search [QUERY]`
 
