@@ -4,9 +4,9 @@ shougun-cli
 Take command of your media
 
 [![oclif](https://img.shields.io/badge/cli-oclif-brightgreen.svg)](https://oclif.io)
-[![Version](https://img.shields.io/npm/v/shougun-cli.svg)](https://npmjs.org/package/shougun-cli)
-[![Downloads/week](https://img.shields.io/npm/dw/shougun-cli.svg)](https://npmjs.org/package/shougun-cli)
-[![License](https://img.shields.io/npm/l/shougun-cli.svg)](https://github.com/dhleong/shougun-cli/blob/master/package.json)
+[![Version](https://img.shields.io/npm/v/@shougun/cli.svg)](https://www.npmjs.com/package/@shougun/cli)
+[![Downloads/week](https://img.shields.io/npm/dw/@shougun/cli.svg)](https://www.npmjs.com/package/@shougun/cli)
+[![License](https://img.shields.io/npm/l/@shougun/cli.svg)](https://github.com/dhleong/shougun-cli/blob/master/package.json)
 
 <!-- toc -->
 * [Usage](#usage)
