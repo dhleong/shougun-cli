@@ -20,7 +20,7 @@ $ npm install -g @shougun/cli
 $ shougun COMMAND
 running command...
 $ shougun (-v|--version|version)
-@shougun/cli/0.1.0 darwin-x64 node-v11.15.0
+@shougun/cli/0.2.0 darwin-x64 node-v11.15.0
 $ shougun --help [COMMAND]
 USAGE
   $ shougun COMMAND
@@ -31,6 +31,7 @@ USAGE
 # Commands
 <!-- commands -->
 * [`shougun borrow [PATH]`](#shougun-borrow-path)
+* [`shougun cast [PATH]`](#shougun-cast-path)
 * [`shougun help [COMMAND]`](#shougun-help-command)
 * [`shougun play [QUERY]`](#shougun-play-query)
 * [`shougun recommend`](#shougun-recommend)
@@ -57,7 +58,26 @@ EXAMPLE
   $ borrow
 ```
 
-_See code: [src/commands/borrow.ts](https://github.com/dhleong/shougun-cli/blob/v0.1.0/src/commands/borrow.ts)_
+_See code: [src/commands/borrow.ts](https://github.com/dhleong/shougun-cli/blob/v0.2.0/src/commands/borrow.ts)_
+
+## `shougun cast [PATH]`
+
+Play by file path
+
+```
+USAGE
+  $ shougun cast [PATH]
+
+OPTIONS
+  -h, --help             show CLI help
+  -s, --server=server    ip:port to connect to
+  -t, --timeout=timeout  in seconds
+
+EXAMPLE
+  $ cast ~/shows/the.good.place.mp4
+```
+
+_See code: [src/commands/cast.ts](https://github.com/dhleong/shougun-cli/blob/v0.2.0/src/commands/cast.ts)_
 
 ## `shougun help [COMMAND]`
 
@@ -93,7 +113,7 @@ EXAMPLE
   $ play the good place
 ```
 
-_See code: [src/commands/play.ts](https://github.com/dhleong/shougun-cli/blob/v0.1.0/src/commands/play.ts)_
+_See code: [src/commands/play.ts](https://github.com/dhleong/shougun-cli/blob/v0.2.0/src/commands/play.ts)_
 
 ## `shougun recommend`
 
@@ -113,7 +133,7 @@ EXAMPLE
   $ recommend
 ```
 
-_See code: [src/commands/recommend.ts](https://github.com/dhleong/shougun-cli/blob/v0.1.0/src/commands/recommend.ts)_
+_See code: [src/commands/recommend.ts](https://github.com/dhleong/shougun-cli/blob/v0.2.0/src/commands/recommend.ts)_
 
 ## `shougun return`
 
@@ -132,7 +152,7 @@ EXAMPLE
   $ return
 ```
 
-_See code: [src/commands/return.ts](https://github.com/dhleong/shougun-cli/blob/v0.1.0/src/commands/return.ts)_
+_See code: [src/commands/return.ts](https://github.com/dhleong/shougun-cli/blob/v0.2.0/src/commands/return.ts)_
 
 ## `shougun search [QUERY]`
 
@@ -151,5 +171,5 @@ EXAMPLE
   $ search the good place
 ```
 
-_See code: [src/commands/search.ts](https://github.com/dhleong/shougun-cli/blob/v0.1.0/src/commands/search.ts)_
+_See code: [src/commands/search.ts](https://github.com/dhleong/shougun-cli/blob/v0.2.0/src/commands/search.ts)_
 <!-- commandsstop -->

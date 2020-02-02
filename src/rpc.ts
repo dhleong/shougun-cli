@@ -89,6 +89,12 @@ export class RpcClient {
         return this.perform("start", media);
     }
 
+    public async startByPath(
+        path: string,
+    ): Promise<IMedia | undefined> {
+        return this.perform("startByPath", path);
+    }
+
     public async startByTitle(
         title: string,
     ): Promise<IMedia | undefined> {
