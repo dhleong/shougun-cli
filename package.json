@@ -1,7 +1,7 @@
 {
   "name": "@shougun/cli",
   "description": "Take command of your media",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "author": "Daniel Leong",
   "bin": {
     "shougun": "./bin/run"
