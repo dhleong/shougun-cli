@@ -46,14 +46,14 @@ export default class Prefs extends RpcCommand {
         let newPrefs: IMediaPrefs | undefined;
         if (flags.clear) {
             await rpc.deletePrefsForSeries(series.id);
-            this.log(`Cleared preferences for ${series.title}.`);
+            cli.styledHeader(`\nCleared preferences for ${series.title}.`);
             return;
         } else if (!prefs) {
             newPrefs = await rpc.loadPrefsForSeries(series.id);
-            this.log(`Preferences for ${series.title}:\n`);
+            cli.styledHeader(`\nPreferences for ${series.title}:\n`);
         } else {
             newPrefs = await rpc.updatePrefsForSeries(series.id, prefs ?? {});
-            this.log(`Updated preferences for ${series.title}:\n`);
+            cli.styledHeader(`\nUpdated preferences for ${series.title}:\n`);
         }
 
         cli.table([

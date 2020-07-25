@@ -96,7 +96,6 @@ function proxyWithUi(
                     throw e;
                 } finally {
                     cli.action.stop();
-                    command.log("");
                 }
             };
         },
