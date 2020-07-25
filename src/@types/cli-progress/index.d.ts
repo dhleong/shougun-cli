@@ -10,23 +10,4 @@ declare module "cli-progress" {
     export interface IExtendedOptions {
         format?: FormatFn;
     }
-
-    export class MultiBar {
-        constructor(
-            options: IExtendedOptions | Options,
-            preset?: Preset,
-        );
-
-        public create(
-            totalValue: number,
-            startValue: number,
-            payload?: any,
-        ): Bar;
-
-        public remove(
-            bar: Bar,
-        ): void;
-
-        public stop(): void;
-    }
 }
