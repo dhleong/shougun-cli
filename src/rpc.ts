@@ -3,6 +3,7 @@ import {
     IBorrowedData,
     IBorrowRequest,
     IBorrowResponse,
+    IEpisodeQuery,
     IMedia,
     IViewedInformation,
 } from "./model";
@@ -99,6 +100,13 @@ export class RpcClient {
         title: string,
     ): Promise<IMedia | undefined> {
         return this.perform("startByTitle", title);
+    }
+
+    public async startEpisodeByTitle(
+        title: string,
+        query: IEpisodeQuery,
+    ): Promise<IMedia | undefined> {
+        return this.perform("startEpisodeByTitle", title, query);
     }
 
     public async borrow(

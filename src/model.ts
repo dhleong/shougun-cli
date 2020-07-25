@@ -17,6 +17,10 @@ export interface IMedia {
     type: MediaType;
 }
 
+/*
+ * Borrowing
+ */
+
 export interface IBorrowRequest {
     episodes: number;
     seriesId: string;
@@ -78,3 +82,14 @@ export interface IBorrowedData {
     tokens: Array<{ serverId: string, token: string }>;
     viewedInformation: IViewedInformation[];
 }
+
+/*
+ * Episode queries, from Babbling
+ */
+
+export interface ISeasonAndEpisodeQuery {
+    episodeIndex: number;
+    seasonIndex: number;
+}
+
+export type IEpisodeQuery = ISeasonAndEpisodeQuery;
