@@ -3,6 +3,7 @@ import { flags as flg } from "@oclif/command";
 import { IEpisodeQuery } from "../model";
 import { printMediaResults } from "../output";
 
+import { PlaybackOptions } from "../flags/playback";
 import { RpcClient } from "../rpc";
 import { RpcCommand } from "../rpc-command";
 
@@ -16,6 +17,7 @@ export default class Play extends RpcCommand {
     ];
     public static flags = {
         ...RpcCommand.flags,
+        ...PlaybackOptions.flags,
 
         episode: flg.integer({
             description: "The episode number to play. If `season` is not also provided, plays this episode of the first season.",
@@ -55,7 +57,8 @@ export default class Play extends RpcCommand {
         flags: any,
         query: string,
     ) {
-        const results = await rpc.startByTitle(query);
+        const opts = PlaybackOptions.parse(flags);
+        const results = await rpc.startByTitle(query, opts);
         if (!results) {
             this.error(`No results for: ${query}`);
             return;
@@ -69,7 +72,8 @@ export default class Play extends RpcCommand {
         query: string,
         episodeQuery: IEpisodeQuery,
     ) {
-        const results = await rpc.startByTitle(query);
+        const opts = PlaybackOptions.parse(flags);
+        const results = await rpc.startByTitle(query, opts);
         if (!results) {
             this.error(`No results for: ${query}`);
             return;

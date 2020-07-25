@@ -5,6 +5,7 @@ import {
     IBorrowResponse,
     IEpisodeQuery,
     IMedia,
+    IPlaybackOptions,
     IViewedInformation,
 } from "./model";
 
@@ -86,27 +87,31 @@ export class RpcClient {
 
     public async start(
         media: IMedia,
+        opts?: IPlaybackOptions,
     ): Promise<IMedia | undefined> {
-        return this.perform("start", media);
+        return this.perform("start", media, opts);
     }
 
     public async startByPath(
         path: string,
+        opts?: IPlaybackOptions,
     ): Promise<IMedia | undefined> {
-        return this.perform("startByPath", path);
+        return this.perform("startByPath", path, opts);
     }
 
     public async startByTitle(
         title: string,
+        opts?: IPlaybackOptions,
     ): Promise<IMedia | undefined> {
-        return this.perform("startByTitle", title);
+        return this.perform("startByTitle", title, opts);
     }
 
     public async startEpisodeByTitle(
         title: string,
         query: IEpisodeQuery,
+        opts?: IPlaybackOptions,
     ): Promise<IMedia | undefined> {
-        return this.perform("startEpisodeByTitle", title, query);
+        return this.perform("startEpisodeByTitle", title, query, opts);
     }
 
     public async borrow(
@@ -118,6 +123,11 @@ export class RpcClient {
     private async perform(request: string, ...args: any[]) {
         const client = createClient(this.port, this.host, this.timeout);
         try {
+            // trim optional args
+            while (args.length && args[args.length - 1] === undefined) {
+                args.pop();
+            }
+
             const result = client.request(request, args);
             if (!result) throw new Error("No result");
 
