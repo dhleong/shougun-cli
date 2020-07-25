@@ -13,7 +13,7 @@ export default class Play extends RpcCommand {
         "$ play the good place",
         "$ play --season 2 the good place",
         "$ play --season 2 --episode 3 the good place",
-        "$ play 2 --episode 9 the good place",
+        "$ play --episode 9 the good place",
     ];
     public static flags = {
         ...RpcCommand.flags,

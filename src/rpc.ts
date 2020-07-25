@@ -7,6 +7,7 @@ import {
     IMedia,
     IPlaybackOptions,
     IViewedInformation,
+    IMediaPrefs,
 } from "./model";
 
 const DEFAULT_TIMEOUT = 7;
@@ -38,6 +39,12 @@ export class RpcClient {
 
     public async getId(): Promise<string> {
         return this.perform("getId");
+    }
+
+    public async borrow(
+        requests: IBorrowRequest[],
+    ): Promise<IBorrowResponse> {
+        return this.perform("borrow", requests);
     }
 
     public async loadLoans(): Promise<void> {
@@ -114,10 +121,23 @@ export class RpcClient {
         return this.perform("startEpisodeByTitle", title, query, opts);
     }
 
-    public async borrow(
-        requests: IBorrowRequest[],
-    ): Promise<IBorrowResponse> {
-        return this.perform("borrow", requests);
+    public async deletePrefsForSeries(
+        seriesId: string,
+    ): Promise<void> {
+        return this.perform("deletePrefsForSeries", seriesId);
+    }
+
+    public async loadPrefsForSeries(
+        seriesId: string,
+    ): Promise<IMediaPrefs | undefined> {
+        return this.perform("loadPrefsForSeries", seriesId);
+    }
+
+    public async updatePrefsForSeries(
+        seriesId: string,
+        prefs: IMediaPrefs,
+    ): Promise<IMediaPrefs> {
+        return this.perform("updatePrefsForSeries", seriesId, prefs);
     }
 
     private async perform(request: string, ...args: any[]) {

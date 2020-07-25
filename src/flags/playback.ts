@@ -1,9 +1,12 @@
 import { flags as flg } from "@oclif/command";
 
 import { IPlaybackOptions } from "../model";
+import { MediaPrefs } from './prefs';
 
 export class PlaybackOptions {
     public static flags = {
+        ...MediaPrefs.flags,
+
         "start-time": flg.string({
             description: "in seconds",
             helpValue: "time",
@@ -17,9 +20,9 @@ export class PlaybackOptions {
 
     public static parse(flags: any): IPlaybackOptions | undefined {
         const currentTime = flags["start-time"];
-        const preferredAudioLanguage = flags.language;
+        const prefs = MediaPrefs.parse(flags);
 
-        if (!(currentTime || preferredAudioLanguage)) {
+        if (!(currentTime || prefs)) {
             return;
         }
 
@@ -29,10 +32,8 @@ export class PlaybackOptions {
             opts.currentTime = currentTime;
         }
 
-        if (preferredAudioLanguage) {
-            opts.prefs = {
-                preferredAudioLanguage,
-            };
+        if (prefs) {
+            opts.prefs = prefs;
         }
 
         return opts;
