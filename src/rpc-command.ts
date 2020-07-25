@@ -34,7 +34,7 @@ export abstract class RpcCommand extends Command {
                 throw new Error(`Invalid server format: ${flags.server}`);
             }
 
-            return RpcClient.findByAddress(host, port, timeout);
+            return RpcClient.findByAddress(host, parseInt(port, 10), timeout);
         }
 
         try {
@@ -96,7 +96,6 @@ function proxyWithUi(
                     throw e;
                 } finally {
                     cli.action.stop();
-                    command.log("");
                 }
             };
         },

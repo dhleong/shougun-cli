@@ -17,6 +17,22 @@ export interface IMedia {
     type: MediaType;
 }
 
+export interface IMediaPrefs {
+    preferredAudioLanguage?: string;
+}
+
+export interface IPlaybackOptions {
+    /**
+     * In *seconds*
+     */
+    currentTime?: number;
+
+    /**
+     * If provided, gets merged onto any prefs set for the media
+     */
+    prefs?: IMediaPrefs;
+}
+
 /*
  * Borrowing
  */

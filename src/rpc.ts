@@ -5,7 +5,9 @@ import {
     IBorrowResponse,
     IEpisodeQuery,
     IMedia,
+    IPlaybackOptions,
     IViewedInformation,
+    IMediaPrefs,
 } from "./model";
 
 const DEFAULT_TIMEOUT = 7;
@@ -37,6 +39,12 @@ export class RpcClient {
 
     public async getId(): Promise<string> {
         return this.perform("getId");
+    }
+
+    public async borrow(
+        requests: IBorrowRequest[],
+    ): Promise<IBorrowResponse> {
+        return this.perform("borrow", requests);
     }
 
     public async loadLoans(): Promise<void> {
@@ -86,38 +94,60 @@ export class RpcClient {
 
     public async start(
         media: IMedia,
+        opts?: IPlaybackOptions,
     ): Promise<IMedia | undefined> {
-        return this.perform("start", media);
+        return this.perform("start", media, opts);
     }
 
     public async startByPath(
         path: string,
+        opts?: IPlaybackOptions,
     ): Promise<IMedia | undefined> {
-        return this.perform("startByPath", path);
+        return this.perform("startByPath", path, opts);
     }
 
     public async startByTitle(
         title: string,
+        opts?: IPlaybackOptions,
     ): Promise<IMedia | undefined> {
-        return this.perform("startByTitle", title);
+        return this.perform("startByTitle", title, opts);
     }
 
     public async startEpisodeByTitle(
         title: string,
         query: IEpisodeQuery,
+        opts?: IPlaybackOptions,
     ): Promise<IMedia | undefined> {
-        return this.perform("startEpisodeByTitle", title, query);
+        return this.perform("startEpisodeByTitle", title, query, opts);
     }
 
-    public async borrow(
-        requests: IBorrowRequest[],
-    ): Promise<IBorrowResponse> {
-        return this.perform("borrow", requests);
+    public async deletePrefsForSeries(
+        seriesId: string,
+    ): Promise<void> {
+        return this.perform("deletePrefsForSeries", seriesId);
+    }
+
+    public async loadPrefsForSeries(
+        seriesId: string,
+    ): Promise<IMediaPrefs | undefined> {
+        return this.perform("loadPrefsForSeries", seriesId);
+    }
+
+    public async updatePrefsForSeries(
+        seriesId: string,
+        prefs: IMediaPrefs,
+    ): Promise<IMediaPrefs> {
+        return this.perform("updatePrefsForSeries", seriesId, prefs);
     }
 
     private async perform(request: string, ...args: any[]) {
         const client = createClient(this.port, this.host, this.timeout);
         try {
+            // trim optional args
+            while (args.length && args[args.length - 1] === undefined) {
+                args.pop();
+            }
+
             const result = client.request(request, args);
             if (!result) throw new Error("No result");
 

@@ -30,6 +30,8 @@ export function printMediaResults(
     flags: any,  // TODO: we could have eg --json
     media: IMedia[],
 ) {
+    console.log("");
+
     if (!media.length) {
         console.log(`No results`);
         return;
