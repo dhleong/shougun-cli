@@ -39,6 +39,10 @@ export default class Play extends RpcCommand {
         const {argv, flags} = this.parse(Play);
         const rpc = await this.rpc(flags);
         const query = argv.join(" ");
+        if (query.trim().length === 0) {
+            this._help();
+            return;
+        }
 
         let episodeQuery: IEpisodeQuery | undefined;
         if (flags.episode || flags.season) {
