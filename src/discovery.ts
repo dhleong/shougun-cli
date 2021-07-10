@@ -51,7 +51,7 @@ export async function discover(
 
     const client = new Client();
     const foundVersions = new Set<string>();
-    let timeout: number | undefined;
+    let timeout: NodeJS.Timeout | undefined;
 
     const promise = new Promise<RpcClient>((resolve, reject) => {
         timeout = setTimeout(() => {
@@ -93,7 +93,9 @@ export async function discover(
                 return;
             }
 
-            clearTimeout(timeout);
+            if (timeout) {
+                clearTimeout(timeout);
+            }
             client.stop();
 
             debug("Found server at", headers, info);
