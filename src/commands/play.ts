@@ -73,7 +73,7 @@ export default class Play extends RpcCommand {
         episodeQuery: IEpisodeQuery,
     ) {
         const opts = PlaybackOptions.parse(flags);
-        const results = await rpc.startByTitle(query, opts);
+        const results = await rpc.startEpisodeByTitle(query, episodeQuery, opts);
         if (!results) {
             this.error(`No results for: ${query}`);
             return;
