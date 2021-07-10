@@ -19,6 +19,7 @@ export interface IMedia {
 
 export interface IMediaPrefs {
     preferredAudioLanguage?: string;
+    preferredSubtitleLanguage?: string;
 }
 
 export interface IPlaybackOptions {

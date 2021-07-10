@@ -1,6 +1,7 @@
 import { flags as flg } from "@oclif/command";
 
 import { IMediaPrefs } from '../model';
+import { cleanObject } from "../util/collection";
 
 export class MediaPrefs {
     public static flags = {
@@ -8,14 +9,20 @@ export class MediaPrefs {
             char: "l",
             description: "preferred audio language",
         }),
+
+        "subtitle": flg.string({
+            char: "s",
+            description: "subtitle language",
+        }),
     }
 
     public static parse(flags: any): IMediaPrefs | undefined {
         const preferredAudioLanguage = flags.language;
-        if (!preferredAudioLanguage) return;
+        const preferredSubtitleLanguage = flags.subtitle;
 
-        return {
+        return cleanObject({
             preferredAudioLanguage,
-        };
+            preferredSubtitleLanguage,
+        });
     }
 }
