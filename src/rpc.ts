@@ -1,3 +1,6 @@
+import _debug from "debug";
+const debug = _debug("shougun-cli:rpc");
+
 import { createClient } from "msgpack-rpc-lite";
 import {
     IBorrowedData,
@@ -148,10 +151,12 @@ export class RpcClient {
                 args.pop();
             }
 
+            debug("Performing: ", request, args);
             const result = client.request(request, args);
             if (!result) throw new Error("No result");
 
             const [ response ] = await result;
+            debug("Response = ", response);
             return response;
         } finally {
             client.close();

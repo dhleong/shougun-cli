@@ -1,3 +1,6 @@
+import _debug from "debug";
+const debug = _debug("shougun-cli:play");
+
 import { flags as flg } from "@oclif/command";
 
 import { IEpisodeQuery } from "../model";
@@ -58,6 +61,8 @@ export default class Play extends RpcCommand {
         query: string,
     ) {
         const opts = PlaybackOptions.parse(flags);
+        debug("Starting media by query", query, "; opts=", opts);
+
         const results = await rpc.startByTitle(query, opts);
         if (!results) {
             this.error(`No results for: ${query}`);
@@ -73,6 +78,8 @@ export default class Play extends RpcCommand {
         episodeQuery: IEpisodeQuery,
     ) {
         const opts = PlaybackOptions.parse(flags);
+        debug("Starting episode", episodeQuery, " by query", query, "; opts=", opts);
+
         const results = await rpc.startEpisodeByTitle(query, episodeQuery, opts);
         if (!results) {
             this.error(`No results for: ${query}`);
