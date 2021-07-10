@@ -20,7 +20,7 @@ $ npm install -g @shougun/cli
 $ shougun COMMAND
 running command...
 $ shougun (-v|--version|version)
-@shougun/cli/0.3.1 darwin-x64 node-v11.15.0
+@shougun/cli/0.4.0 darwin-x64 node-v14.16.1
 $ shougun --help [COMMAND]
 USAGE
   $ shougun COMMAND
@@ -59,7 +59,7 @@ EXAMPLE
   $ borrow
 ```
 
-_See code: [src/commands/borrow.ts](https://github.com/dhleong/shougun-cli/blob/v0.3.1/src/commands/borrow.ts)_
+_See code: [src/commands/borrow.ts](https://github.com/dhleong/shougun-cli/blob/v0.4.0/src/commands/borrow.ts)_
 
 ## `shougun cast [PATH]`
 
@@ -73,6 +73,7 @@ OPTIONS
   -h, --help               show CLI help
   -l, --language=language  preferred audio language
   -s, --server=server      ip:port to connect to
+  -s, --subtitle=subtitle  subtitle language
   -t, --timeout=timeout    in seconds
   --start-time=time        in seconds
 
@@ -80,7 +81,7 @@ EXAMPLE
   $ cast ~/shows/the.good.place.mp4
 ```
 
-_See code: [src/commands/cast.ts](https://github.com/dhleong/shougun-cli/blob/v0.3.1/src/commands/cast.ts)_
+_See code: [src/commands/cast.ts](https://github.com/dhleong/shougun-cli/blob/v0.4.0/src/commands/cast.ts)_
 
 ## `shougun help [COMMAND]`
 
@@ -97,7 +98,7 @@ OPTIONS
   --all  see all commands in CLI
 ```
 
-_See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v3.2.0/src/commands/help.ts)_
+_See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v3.2.2/src/commands/help.ts)_
 
 ## `shougun play [QUERY]`
 
@@ -111,6 +112,7 @@ OPTIONS
   -h, --help               show CLI help
   -l, --language=language  preferred audio language
   -s, --server=server      ip:port to connect to
+  -s, --subtitle=subtitle  subtitle language
   -t, --timeout=timeout    in seconds
 
   --episode=episode        The episode number to play. If `season` is not also provided, plays this episode of the first
@@ -128,7 +130,7 @@ EXAMPLES
   $ play --episode 9 the good place
 ```
 
-_See code: [src/commands/play.ts](https://github.com/dhleong/shougun-cli/blob/v0.3.1/src/commands/play.ts)_
+_See code: [src/commands/play.ts](https://github.com/dhleong/shougun-cli/blob/v0.4.0/src/commands/play.ts)_
 
 ## `shougun prefs [QUERY]`
 
@@ -142,6 +144,7 @@ OPTIONS
   -h, --help               show CLI help
   -l, --language=language  preferred audio language
   -s, --server=server      ip:port to connect to
+  -s, --subtitle=subtitle  subtitle language
   -t, --timeout=timeout    in seconds
   --clear                  If set, remove all preferences
 
@@ -151,7 +154,7 @@ EXAMPLES
   $ prefs --clear the good place
 ```
 
-_See code: [src/commands/prefs.ts](https://github.com/dhleong/shougun-cli/blob/v0.3.1/src/commands/prefs.ts)_
+_See code: [src/commands/prefs.ts](https://github.com/dhleong/shougun-cli/blob/v0.4.0/src/commands/prefs.ts)_
 
 ## `shougun recommend`
 
@@ -171,7 +174,7 @@ EXAMPLE
   $ recommend
 ```
 
-_See code: [src/commands/recommend.ts](https://github.com/dhleong/shougun-cli/blob/v0.3.1/src/commands/recommend.ts)_
+_See code: [src/commands/recommend.ts](https://github.com/dhleong/shougun-cli/blob/v0.4.0/src/commands/recommend.ts)_
 
 ## `shougun return`
 
@@ -190,7 +193,7 @@ EXAMPLE
   $ return
 ```
 
-_See code: [src/commands/return.ts](https://github.com/dhleong/shougun-cli/blob/v0.3.1/src/commands/return.ts)_
+_See code: [src/commands/return.ts](https://github.com/dhleong/shougun-cli/blob/v0.4.0/src/commands/return.ts)_
 
 ## `shougun search [QUERY]`
 
@@ -209,5 +212,5 @@ EXAMPLE
   $ search the good place
 ```
 
-_See code: [src/commands/search.ts](https://github.com/dhleong/shougun-cli/blob/v0.3.1/src/commands/search.ts)_
+_See code: [src/commands/search.ts](https://github.com/dhleong/shougun-cli/blob/v0.4.0/src/commands/search.ts)_
 <!-- commandsstop -->
