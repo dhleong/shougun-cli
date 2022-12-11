@@ -145,6 +145,12 @@ export class RpcClient {
 
     private async perform(request: string, ...args: any[]) {
         const client = createClient(this.port, this.host, this.timeout);
+
+        await new Promise<void>((resolve, reject) => {
+            client.once('connect', resolve);
+            client.once('error', reject);
+        });
+
         try {
             // trim optional args
             while (args.length && args[args.length - 1] === undefined) {
